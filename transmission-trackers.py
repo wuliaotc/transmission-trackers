@@ -140,8 +140,7 @@ def validateTrackerURL(url, dns=True):
       if ip in ips:
         dbg("Host's '{}' IP '{}' is duplicate".format(h, ip))
         return False
-
-    ips.add(ip)
+      ips.add(ip)
 
   dbg("Approving tracker '{}'".format(url))
   hosts.add(h)
@@ -248,6 +247,10 @@ for t in torrents:
 
   if diff:
     lg('{}: Adding {} trackers (before: {})'.format(t.name, len(diff), len(ttrk)))
-    tc.change_torrent(t.id, trackerAdd=list(diff))
+    try:
+        tc.change_torrent(t.id, trackerAdd=list(diff))
+    except Exception as e:
+        dbg('{}: Adding trackers failed,error: {})'.format(t.name, e))
+        continue
   else:
     dbg('{}: update not needed'.format(t.name))
