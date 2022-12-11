@@ -81,7 +81,7 @@ hosts, ips = set(()), set(())
 
 import sys, os, time, socket
 try:
-  from transmissionrpc import Client
+  from transmission_rpc import Client
   if 'host' in client:
     client['address'] = client['host']
     del client['host']
@@ -237,14 +237,13 @@ for t in torrents:
   if config['status_filter'] and not t.status in config['status_filter']:
     dbg('{}: skipping due to status filter'.format(t.name))
     continue
-  if t.isPrivate:
+  if t.is_private:
     dbg('{}: skipping private torrent'.format(t.name))
     continue
 
   ttrk = set(())
   for trk in t.trackers:
-    ttrk.add(trk['announce'])
-
+    ttrk.add(trk.announce)
   diff = trackers - ttrk
 
   if diff:
